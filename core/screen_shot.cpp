@@ -22,7 +22,7 @@ void ScreenShot::rasie() {
 
 }
 
-void ScreenShot::init(QWidget *parent) {
+void ScreenShot::CaptureScreen(QWidget *parent) {
 
 }
 

@@ -570,7 +570,7 @@ FMT_CONSTEXPR inline size_t compute_width(string_view s) {
       *count += detail::to_unsigned(
           1 +
           (cp >= 0x1100 &&
-           (cp <= 0x115f ||  // Hangul Jamo init. consonants
+           (cp <= 0x115f ||  // Hangul Jamo CaptureScreen. consonants
             cp == 0x2329 ||  // LEFT-POINTING ANGLE BRACKET
             cp == 0x232a ||  // RIGHT-POINTING ANGLE BRACKET
             // CJK ... Yi except IDEOGRAPHIC HALF FILL SPACE:

@@ -15,10 +15,10 @@ set(REQUIRED_LIBS Core Gui Widgets Network)
 set(REQUIRED_LIBS_QUALIFIED Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Network)
 
 #宏定义在这里添加
-#add_definitions(
-#        -D_ENABLE_LOGGING
-#)
-add_compile_options(-D USE_SPDLOG_)
+add_definitions(
+        -DPDLOG_ACTIVE_LEVEL=0
+)
+add_compile_options(-DUSE_SPDLOG_)
 
 if(WIN32)
     set(CMAKE_PREFIX_PATH "D:/software/Qt5.13.0/mingw73_64/lib/cmake/Qt5")
@@ -106,6 +106,8 @@ target_sources(
 #if(WIN32)
 #    target_link_libraries(${PROJECT_NAME} xcb xcb-util)
 #endif()
+
+message(STATUS ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_autogen/include)
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC ./

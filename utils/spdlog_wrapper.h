@@ -4,7 +4,7 @@
 
 #ifndef QT_CLION_SPDLOG_WRAPPER_H
 #define QT_CLION_SPDLOG_WRAPPER_H
-
+#define SPDLOG_ACTIVE_LEVEL 0
 #include "spdlog/spdlog.h"
 
 namespace spdlog
@@ -14,7 +14,8 @@ namespace spdlog
 } // spdlog
 
 #ifdef USE_SPDLOG_
-#define SPD_TRACE(fmt, ...)   spdlog::logger_ptr()->trace(fmt, ##__VA_ARGS__);
+
+#define SPD_TRACE(fmt, ...)    spdlog::logger_ptr()->trace(fmt, ##__VA_ARGS__);
 #define SPD_DEBUG(fmt, ...)   spdlog::logger_ptr()->debug(fmt, ##__VA_ARGS__);
 #define SPD_INFO(fmt, ...)        spdlog::logger_ptr()->info(fmt, ##__VA_ARGS__);
 #define SPD_WARN(fmt, ...)        spdlog::logger_ptr()->warn(fmt, ##__VA_ARGS__);

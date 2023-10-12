@@ -23,7 +23,7 @@ Widget::Widget(QWidget* parent)
 
 Widget::~Widget()
 {
-    SPD_ERROR("{0}", __FUNCTION__);
+    //SPD_ERROR("{0}", __FUNCTION__);
 }
 
 void Widget::start(std::shared_ptr<ScreenList> list, int index)

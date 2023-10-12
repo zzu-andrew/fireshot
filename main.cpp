@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
 
     // 查看系统是否支持托盘功能
     if (!QSystemTrayIcon::isSystemTrayAvailable()) {
-        SPD_ERROR("system tray disabled");
+        SPD_ERROR("fmt string", "system tray disabled");
         return 1;
     }
 

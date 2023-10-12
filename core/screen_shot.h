@@ -8,6 +8,7 @@
 #include <QObject>
 #include <QWidget>
 #include <QList>
+#include <memory>
 //#include "widget.h"
 
 class FireShot;
@@ -18,7 +19,7 @@ public:
     explicit ScreenShot(FireShot *lpFireShot);
     ~ScreenShot() override;
 
-    void init(QWidget* parent);
+    void CaptureScreen(QWidget* parent);
 
     void cleanup();
 

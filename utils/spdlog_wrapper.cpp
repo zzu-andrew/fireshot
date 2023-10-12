@@ -2,6 +2,7 @@
 // Created by wangyz38535 on 2023/10/11.
 //
 #include <QDir>
+
 #include "spdlog_wrapper.h"
 #include "spdlog/spdlog.h"
 #include "spdlog/cfg/env.h"  // support for loading levels from the environment variable
@@ -34,7 +35,11 @@ namespace spdlog
         logger_->set_level(static_cast<level::level_enum>(lv));
         logger_->flush_on(static_cast<level::level_enum>(flv));
 
-        set_pattern("[%H:%M:%S %z] [thread %t] %v");
+        //set_pattern("[%H:%M:%S %z] [thread %t] %v");
+        logger_->set_pattern("[%Y-%m-%d %H:%M:%S] [%n] [%^%l%$] [%s:%#] %v");
+
+        SPDLOG_LOGGER_INFO(logger_, "test3 {}", 3);//会输出文件名和行号
+
 #endif // USE_SPDLOG_
 
     }

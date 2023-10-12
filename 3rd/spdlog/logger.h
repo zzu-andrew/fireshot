@@ -72,7 +72,7 @@ public:
         : logger(std::move(name), {std::move(single_sink)})
     {}
 
-    // Logger with sinks init list
+    // Logger with sinks CaptureScreen list
     logger(std::string name, sinks_init_list sinks)
         : logger(std::move(name), sinks.begin(), sinks.end())
     {}

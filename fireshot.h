@@ -27,13 +27,14 @@ public:
 
 signals:
     void SatrtShot();
-    void ShotDone(FireShot* starer);
+    void ShotDone(ScreenShot* starer);
     void CheckHotKey(uint32_t value);
-    void StopShot(FireShot* starter);
+    void StopShot(ScreenShot* starter);
 
 private slots:
     void OnStartShot();
     void OnShotDone(ScreenShot* starer);
+    // 点击退出时能退出截图进程
     void OnExitShot();
     void OnShowSetting();
 
@@ -47,6 +48,8 @@ private:
     QAction* m_lpQuitAction; // 退出按钮
     SettingDlg *m_lpSettingDlg; // tray settings
     bool m_bShotting; // 是否正在截图
+
+    std::list<ScreenShot*> m_screenShoter;
 
 };
 

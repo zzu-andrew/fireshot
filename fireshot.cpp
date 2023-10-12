@@ -7,10 +7,12 @@
 #include <QAction>
 #include <QMenu>
 #include <QDesktopWidget>
+#include <QApplication>
 
 #include "fireshot.h"
 #include "utils/spdlog_wrapper.h"
 #include "fireshot_errno.h"
+#include "core/screen_shot.h"
 
 FireShot::FireShot(QWidget *parent) :
     QDialog(parent), m_lpTrayIcon(new QSystemTrayIcon(this)),
@@ -50,12 +52,12 @@ void FireShot::OnShowSetting()
 
 int32_t FireShot::CreateActions() {
     // construct tray setting icon
-    m_lpSettingAction = new QAction(tr("&Settings"), this);
+    m_lpSettingAction = new QAction(tr("Setting"), this);
     QIcon settingIcon(":/icons/icon/menu-setting.png");
     m_lpSettingAction->setIcon(settingIcon);
     connect(m_lpSettingAction, &QAction::triggered, this, &FireShot::OnShowSetting);
     // construct tray shot icon
-    m_lpShotAction = new QAction(tr("S$hot"), this);
+    m_lpShotAction = new QAction(tr("Shot"), this);
     QIcon shotIcon(":/icons/icon/menu-shot.png");
     m_lpShotAction->setIcon(shotIcon);
     connect(m_lpShotAction, &QAction::triggered, this, &FireShot::OnStartShot);
@@ -75,6 +77,20 @@ void FireShot::OnStartShot() {
         return;
     }
 
+    SPD_INFO("-----------------------start shot --------------------");
+    m_bShotting = true;
+    ScreenShot *lpScreenShot = nullptr;
+    if (m_screenShoter.empty()) {
+        lpScreenShot = new ScreenShot(this);
+        // 通过信号将两个对象之间互通有无
+        connect(this, &FireShot::StopShot, lpScreenShot, &ScreenShot::ShotDone);
+        connect(lpScreenShot, &ScreenShot::ShotDone, this, &FireShot::OnShotDone);
+    } else {
+        lpScreenShot = m_screenShoter.back();
+        m_screenShoter.pop_front();
+    }
+
+    lpScreenShot->CaptureScreen(this);
 
 }
 
@@ -83,7 +99,8 @@ void FireShot::OnShotDone(ScreenShot *starer) {
 }
 
 void FireShot::OnExitShot() {
-
+    m_lpTrayIcon->hide();
+    QApplication::exit(0);
 }
 
 int32_t FireShot::CreateTrayWithIcon() {
