@@ -37,7 +37,7 @@ void requestCaptureAndWait(const CaptureRequest& req)
     flameshot->requestCapture(req);
     QObject::connect(flameshot, &Flameshot::captureTaken, [&](const QPixmap&) {
         // if this instance is not daemon, make sure it exit after caputre finish
-        if (FlameshotDaemon::instance() == nullptr && !Flameshot::instance()->haveExternalWidget()) {
+        if (FireshotDaemon::instance() == nullptr && !Flameshot::instance()->haveExternalWidget()) {
             qApp->exit(0);
         }
     });
@@ -62,37 +62,35 @@ int main(int argc, char* argv[])
     QCoreApplication::setApplicationName(QStringLiteral("flameshot"));
     QCoreApplication::setOrganizationName(QStringLiteral("flameshot"));
 
- 
-        SingleApplication app(argc, argv);
+    SingleApplication app(argc, argv);
 
-        QApplication::setStyle(new StyleOverride);
+    QApplication::setStyle(new StyleOverride);
 
-        QTranslator translator, qtTranslator;
-        QStringList trPaths = PathInfo::translationsPaths();
+    QTranslator translator, qtTranslator;
+    QStringList trPaths = PathInfo::translationsPaths();
 
-        for (const QString& path : trPaths) {
-            bool match = translator.load(QLocale(),
-                                         QStringLiteral("Internationalization"),
-                                         QStringLiteral("_"),
-                                         path);
-            if (match) {
-                break;
-            }
+    for (const QString& path : trPaths) {
+        bool match = translator.load(QLocale(),
+                                     QStringLiteral("Internationalization"),
+                                     QStringLiteral("_"),
+                                     path);
+        if (match) {
+            break;
         }
+    }
 
-        qtTranslator.load(
-          QLocale::system(),
-          "qt",
-          "_",
-          QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    qtTranslator.load(
+      QLocale::system(),
+      "qt",
+      "_",
+      QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    qApp->installTranslator(&translator);
+    qApp->installTranslator(&qtTranslator);
 
-        qApp->installTranslator(&translator);
-        qApp->installTranslator(&qtTranslator);
-        qApp->setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
+    qApp->setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
 
-        auto c = Flameshot::instance();
-        FlameshotDaemon::start();
+    Flameshot::instance();
+    FireshotDaemon::start();
 
-
-        return qApp->exec();
+    return qApp->exec();
 }

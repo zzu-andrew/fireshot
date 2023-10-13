@@ -15,7 +15,7 @@ public:
 private:
     void initMenu();
 
-    void startGuiCapture();
+    static void startGuiCapture();
 
     QMenu* m_menu;
 };

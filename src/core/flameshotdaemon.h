@@ -11,12 +11,12 @@ class QDBusConnection;
 class TrayIcon;
 class CaptureWidget;
 
-class FlameshotDaemon : public QObject
+class FireshotDaemon : public QObject
 {
     Q_OBJECT
 public:
     static void start();
-    static FlameshotDaemon* instance();
+    static FireshotDaemon* instance();
     static void createPin(const QPixmap& capture, QRect geometry);
     static void copyToClipboard(const QPixmap& capture);
     static void copyToClipboard(const QString& text,
@@ -29,7 +29,7 @@ public:
       const int timeout = 5000);
 
 private:
-    FlameshotDaemon();
+    FireshotDaemon();
     void quitIfIdle();
     void attachPin(const QPixmap& pixmap, QRect geometry);
     void attachScreenshotToClipboard(const QPixmap& pixmap);
@@ -51,5 +51,5 @@ private:
     TrayIcon* m_trayIcon;
 
 
-    static FlameshotDaemon* m_instance;
+    static FireshotDaemon* m_instance;
 };

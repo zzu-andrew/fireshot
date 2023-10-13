@@ -16,7 +16,7 @@ TrayIcon::TrayIcon(QObject* parent)
 {
     initMenu();
 
-    setToolTip(QStringLiteral("Flameshot"));
+    setToolTip(QStringLiteral("FireShot"));
 
     setContextMenu(m_menu);
     QIcon icon =
@@ -65,10 +65,10 @@ void TrayIcon::initMenu()
 
     auto* captureAction = new QAction(tr("&Take Screenshot"), this);
     connect(captureAction, &QAction::triggered, this, [this]() {
-    // Wait 400 ms to hide the QMenu
-    QTimer::singleShot(400, this, [this]() {
-        startGuiCapture();
-    });
+        // Wait 400 ms to hide the QMenu
+        QTimer::singleShot(400, this, [this]() {
+            startGuiCapture();
+        });
     });
     auto* launcherAction = new QAction(tr("&Open Launcher"), this);
     connect(launcherAction,
@@ -111,6 +111,6 @@ void TrayIcon::initMenu()
 
 void TrayIcon::startGuiCapture()
 {
-    auto* widget = Flameshot::instance()->gui();
+    Flameshot::instance()->gui();
 
 }

@@ -348,11 +348,11 @@ void Flameshot::exportCapture(const QPixmap& capture,
     }
 
     if (tasks & CR::COPY) {
-        FlameshotDaemon::copyToClipboard(capture);
+        FireshotDaemon::copyToClipboard(capture);
     }
 
     if (tasks & CR::PIN) {
-        FlameshotDaemon::createPin(capture, selection);
+        FireshotDaemon::createPin(capture, selection);
         if (mode == CR::SCREEN_MODE || mode == CR::FULLSCREEN_MODE) {
             AbstractLogger::info()
               << QObject::tr("Full screen screenshot pinned to screen");
@@ -376,7 +376,7 @@ void Flameshot::exportCapture(const QPixmap& capture,
           widget, &ImgUploaderBase::uploadOk, [=](const QUrl& url) {
               if (ConfigHandler().copyURLAfterUpload()) {
                   if (!(tasks & CR::COPY)) {
-                      FlameshotDaemon::copyToClipboard(
+                      FireshotDaemon::copyToClipboard(
                         url.toString(), tr("URL copied to clipboard."));
                   }
                   widget->showPostUploadDialog();

@@ -165,13 +165,13 @@ void ImgUploaderBase::openURL()
 
 void ImgUploaderBase::copyURL()
 {
-    FlameshotDaemon::copyToClipboard(m_imageURL.toString());
+    FireshotDaemon::copyToClipboard(m_imageURL.toString());
     m_notification->showMessage(tr("URL copied to clipboard."));
 }
 
 void ImgUploaderBase::copyImage()
 {
-    FlameshotDaemon::copyToClipboard(m_pixmap);
+    FireshotDaemon::copyToClipboard(m_pixmap);
     m_notification->showMessage(tr("Screenshot copied to clipboard."));
 }
 
