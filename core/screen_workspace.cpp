@@ -4,3 +4,11 @@
 
 #include "screen_workspace.h"
 #include "utils/spdlog_wrapper.h"
+
+Workspace::Workspace(QWidget *lpWidget) {
+
+}
+
+Workspace::~Workspace() {
+
+}

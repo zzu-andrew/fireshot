@@ -9,6 +9,8 @@
 #include <QWidget>
 #include <QList>
 #include <memory>
+#include "screen_list.h"
+#include "screen_widget.h"
 //#include "widget.h"
 
 class FireShot;
@@ -26,8 +28,8 @@ public:
     void rasie();
 
 private:
-    QList<Widget*>* m_widgets;
-    QList<Widget*>* m_unused_widgets;
+    QList<ScreenWidgets*>* m_lpWidgets;
+    QList<ScreenWidgets*>* m_lpUnusedWidgets;
 
 signals:
     void ShotDone(ScreenShot*);

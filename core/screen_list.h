@@ -29,7 +29,7 @@ struct ScreenInfo{
 class ScreenList
 {
 public:
-    ScreenList(QList<ScreenInfo> list);
+    explicit ScreenList(QList<ScreenInfo> list);
 
     QRect allBoundary(bool isGlobal=false) const;
     QPixmap allPixMap() const;

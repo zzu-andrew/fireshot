@@ -11,6 +11,7 @@
 #include <QPainter>
 
 #include "screen_list.h"
+#include "screen_workspace.h"
 
 class ScreenWidgets : public QWidget {
     Q_OBJECT
@@ -22,6 +23,7 @@ public:
     void start(std::shared_ptr<ScreenList> list, int index);
     void cleanup();
 
+    Workspace* workspace();
     void finishConfirmArea();
 
 protected:
@@ -40,7 +42,7 @@ protected:
 private:
     QString m_status;  //unknown, active, giveup
     std::shared_ptr<ScreenList> m_screenlist;
-
+    Workspace m_workspace;
 };
 
 

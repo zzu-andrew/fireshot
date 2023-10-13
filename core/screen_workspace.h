@@ -11,8 +11,19 @@
 #include <QFont>
 #include <QPushButton>
 
+class Workspace : public QObject {
+Q_OBJECT
+
+public:
+    explicit Workspace(QWidget *lpWidget);
+
+    ~Workspace() override;
+
+signals:
+    void quitShot(int code);
+    void finishConfirmArea();
 
 
-
+}
 
 #endif //FIRESHOT_SCREEN_WORKSPACE_H

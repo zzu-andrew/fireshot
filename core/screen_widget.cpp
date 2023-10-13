@@ -5,25 +5,19 @@
 
 #include "screen_widget.h"
 #include "utils/spdlog_wrapper.h"
-#include "uti"
 
 #define UNVISIABLE_X -819200
 #define UNVISIABLE_Y -819200
-
-ScreenWidgets::ScreenWidgets(QWidget *parent) : QWidget(parent) {
-
-}
 
 ScreenWidgets::~ScreenWidgets() {
 
 }
 
 
-ScreenWidgets::ScreenWidgets(QWidget* parent)
-        : QWidget(parent)
-        , m_screenlist(nullptr)
-        , m_status("unknown")
-{
+ScreenWidgets::ScreenWidgets(QWidget* parent) : QWidget(parent),
+        m_screenlist(nullptr),
+        m_status("unknown"),
+        m_workspace(this) {
 #ifndef USE_SPDLOG_
     setWindowFlags(Qt::Tool);
     setAttribute(Qt::WA_TranslucentBackground);
@@ -63,10 +57,10 @@ void ScreenWidgets::cleanup()
 
 void ScreenWidgets::finishConfirmArea()
 {
-    //if (m_workspace->areaConfirmed() == true)
-    //    m_status = "active";
-    //else
-    //    m_status = "giveup";
+    if (m_workspace.areaConfirmed() == true)
+        m_status = "active";
+    else
+        m_status = "giveup";
 }
 
 void ScreenWidgets::showEvent(QShowEvent* event)
@@ -150,6 +144,10 @@ void ScreenWidgets::leaveEvent(QEvent* event)
     //     }
 
     QWidget::leaveEvent(event);
+}
+
+Workspace *ScreenWidgets::workspace() {
+    return &m_workspace;
 }
 
 
