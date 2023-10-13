@@ -216,9 +216,11 @@ endif()
 message("Flameshot predefined color palette large: " ${FLAMESHOT_PREDEFINED_COLOR_PALETTE_LARGE})
 target_compile_definitions(fireshot PRIVATE PREDEFINED_COLOR_PALETTE_LARGE=${FLAMESHOT_PREDEFINED_COLOR_PALETTE_LARGE})
 
+# 查找git并获取git版本以及当前目录的hash值
 find_package (Git)
 if (GIT_FOUND)
     message("git found: ${GIT_EXECUTABLE} in version     ${GIT_VERSION_STRING}")
+    #  git rev-parse --short HEAD
     execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD OUTPUT_VARIABLE FLAMESHOT_GIT_HASH)
     string(REGEX REPLACE "\r*\n$" "" FLAMESHOT_GIT_HASH "${FLAMESHOT_GIT_HASH}")
     target_compile_definitions(fireshot PRIVATE FLAMESHOT_GIT_HASH="${FLAMESHOT_GIT_HASH}")
@@ -227,6 +229,8 @@ else()
     target_compile_definitions(fireshot PRIVATE FLAMESHOT_GIT_HASH="-")
     message("git command is not found")
 endif ()
+
+
 target_compile_definitions(fireshot PRIVATE APP_PREFIX="${CMAKE_INSTALL_PREFIX}")
 target_compile_definitions(fireshot PRIVATE APP_VERSION="v${PROJECT_VERSION}")
 
@@ -234,9 +238,6 @@ if (FLAMESHOT_DEBUG_CAPTURE)
     target_compile_definitions(fireshot PRIVATE FLAMESHOT_DEBUG_CAPTURE)
 endif ()
 
-if (USE_MONOCHROME_ICON)
-    target_compile_definitions(fireshot PRIVATE USE_MONOCHROME_ICON)
-endif ()
 
 foreach (FILE ${QM_FILES})
     get_filename_component(F_NAME ${FILE} NAME)
@@ -265,59 +266,6 @@ install(TARGETS fireshot
         BUNDLE DESTINATION ${CMAKE_INSTALL_BINDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-if (UNIX)
-    # Install desktop files, completion and dbus files
-    configure_file(${CMAKE_SOURCE_DIR}/data/desktopEntry/package/org.fireshot.Flameshot.desktop
-            ${CMAKE_CURRENT_BINARY_DIR}/share/applications/org.fireshot.Flameshot.desktop @ONLY)
-
-    configure_file(${CMAKE_SOURCE_DIR}/data/appdata/org.fireshot.Flameshot.metainfo.xml
-            ${CMAKE_CURRENT_BINARY_DIR}/share/metainfo/org.fireshot.Flameshot.metainfo.xml COPYONLY)
-
-    configure_file(${CMAKE_SOURCE_DIR}/data/shell-completion/fireshot.bash
-            ${CMAKE_CURRENT_BINARY_DIR}/share/bash-completion/completions/fireshot COPYONLY)
-
-    configure_file(${CMAKE_SOURCE_DIR}/data/shell-completion/fireshot.zsh
-            ${CMAKE_CURRENT_BINARY_DIR}/share/zsh/site-functions/_flameshot COPYONLY)
-
-    configure_file(${CMAKE_SOURCE_DIR}/data/shell-completion/fireshot.fish
-            ${CMAKE_CURRENT_BINARY_DIR}/share/fish/vendor_completions.d/fireshot.fish COPYONLY)
-
-    configure_file(${CMAKE_SOURCE_DIR}/data/dbus/org.fireshot.Flameshot.xml
-            ${CMAKE_CURRENT_BINARY_DIR}/share/dbus-1/interfaces/org.fireshot.Flameshot.xml COPYONLY)
-
-    configure_file(${CMAKE_SOURCE_DIR}/data/dbus/org.fireshot.Flameshot.service.in
-            ${CMAKE_CURRENT_BINARY_DIR}/share/dbus-1/services/org.fireshot.Flameshot.service)
-
-    # Install man pages
-    configure_file(${CMAKE_SOURCE_DIR}/data/man/man1/fireshot.1
-            ${CMAKE_CURRENT_BINARY_DIR}/share/man/man1/fireshot.1 COPYONLY)
-
-    # Install Icons
-    configure_file(${CMAKE_SOURCE_DIR}/data/img/hicolor/48x48/apps/org.fireshot.Flameshot.png
-            ${CMAKE_CURRENT_BINARY_DIR}/share/icons/hicolor/48x48/apps/org.fireshot.Flameshot.png COPYONLY)
-
-    configure_file(${CMAKE_SOURCE_DIR}/data/img/hicolor/128x128/apps/org.fireshot.Flameshot.png
-            ${CMAKE_CURRENT_BINARY_DIR}/share/icons/hicolor/128x128/apps/org.fireshot.Flameshot.png COPYONLY)
-
-    configure_file(${CMAKE_SOURCE_DIR}/data/img/hicolor/scalable/apps/org.fireshot.Flameshot.svg
-            ${CMAKE_CURRENT_BINARY_DIR}/share/icons/hicolor/scalable/apps/org.fireshot.Flameshot.svg COPYONLY)
-
-    # Install icon with both names
-    configure_file(${CMAKE_SOURCE_DIR}/data/img/hicolor/48x48/apps/fireshot.png
-            ${CMAKE_CURRENT_BINARY_DIR}/share/icons/hicolor/48x48/apps/fireshot.png COPYONLY)
-
-    configure_file(${CMAKE_SOURCE_DIR}/data/img/hicolor/128x128/apps/fireshot.png
-            ${CMAKE_CURRENT_BINARY_DIR}/share/icons/hicolor/128x128/apps/fireshot.png COPYONLY)
-
-    configure_file(${CMAKE_SOURCE_DIR}/data/img/hicolor/scalable/apps/fireshot.svg
-            ${CMAKE_CURRENT_BINARY_DIR}/share/icons/hicolor/scalable/apps/fireshot.svg COPYONLY)
-
-    # Install assets
-    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/share/ DESTINATION ${CMAKE_INSTALL_DATAROOTDIR})
-
-    # Install Translations
-    install(FILES ${QM_FILES} DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/fireshot/translations)
-endif ()
 
 # windeployqt
 if (WIN32)

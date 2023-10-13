@@ -13,10 +13,9 @@ public:
 
 
 private:
-    void initTrayIcon();
     void initMenu();
 
-    void startGuiCapture();
+    static void startGuiCapture();
 
     QMenu* m_menu;
 };

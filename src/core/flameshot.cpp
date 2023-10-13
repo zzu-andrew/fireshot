@@ -81,18 +81,6 @@ CaptureWidget* Flameshot::gui(const CaptureRequest& req)
         return nullptr;
     }
 
-#if defined(Q_OS_MACOS)
-    // This is required on MacOS because of Mission Control. If you'll switch to
-    // another Desktop you cannot take a new screenshot from the tray, you have
-    // to switch back to the Flameshot Desktop manually. It is not obvious and a
-    // large number of users are confused and report a bug.
-    if (m_captureWindow != nullptr) {
-        m_captureWindow->close();
-        delete m_captureWindow;
-        m_captureWindow = nullptr;
-    }
-#endif
-
     if (nullptr == m_captureWindow) {
         // TODO is this unnecessary now?
         int timeout = 5000; // 5 seconds
@@ -117,14 +105,8 @@ CaptureWidget* Flameshot::gui(const CaptureRequest& req)
 
 #ifdef Q_OS_WIN
         m_captureWindow->show();
-#elif defined(Q_OS_MACOS)
-        // In "Emulate fullscreen mode"
-        m_captureWindow->showFullScreen();
-        m_captureWindow->activateWindow();
-        m_captureWindow->raise();
 #else
         m_captureWindow->showFullScreen();
-//        m_captureWindow->show(); // For CaptureWidget Debugging under Linux
 #endif
         return m_captureWindow;
     } else {
@@ -220,10 +202,6 @@ void Flameshot::config()
     if (m_configWindow == nullptr) {
         m_configWindow = new ConfigWindow();
         m_configWindow->show();
-#if defined(Q_OS_MACOS)
-        m_configWindow->activateWindow();
-        m_configWindow->raise();
-#endif
     }
 }
 
@@ -370,11 +348,11 @@ void Flameshot::exportCapture(const QPixmap& capture,
     }
 
     if (tasks & CR::COPY) {
-        FlameshotDaemon::copyToClipboard(capture);
+        FireshotDaemon::copyToClipboard(capture);
     }
 
     if (tasks & CR::PIN) {
-        FlameshotDaemon::createPin(capture, selection);
+        FireshotDaemon::createPin(capture, selection);
         if (mode == CR::SCREEN_MODE || mode == CR::FULLSCREEN_MODE) {
             AbstractLogger::info()
               << QObject::tr("Full screen screenshot pinned to screen");
@@ -398,7 +376,7 @@ void Flameshot::exportCapture(const QPixmap& capture,
           widget, &ImgUploaderBase::uploadOk, [=](const QUrl& url) {
               if (ConfigHandler().copyURLAfterUpload()) {
                   if (!(tasks & CR::COPY)) {
-                      FlameshotDaemon::copyToClipboard(
+                      FireshotDaemon::copyToClipboard(
                         url.toString(), tr("URL copied to clipboard."));
                   }
                   widget->showPostUploadDialog();

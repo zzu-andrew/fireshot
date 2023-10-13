@@ -52,6 +52,6 @@ QString generateKernelString()
 
 void InfoWindow::on_CopyInfoButton_clicked()
 {
-    FlameshotDaemon::copyToClipboard(GlobalValues::versionInfo() + "\n" +
+    FireshotDaemon::copyToClipboard(GlobalValues::versionInfo() + "\n" +
                                      generateKernelString());
 }

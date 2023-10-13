@@ -11,7 +11,7 @@ namespace spdlog
 {
     void SpdlogInit(const char* name, const char* file_name, int h, int m, int lv, int flv);
     logger* logger_ptr();
-} // spdlog
+} // spdlog/wo
 
 #ifdef USE_SPDLOG_
 

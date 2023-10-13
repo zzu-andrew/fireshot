@@ -21,42 +21,18 @@ TrayIcon::TrayIcon(QObject* parent)
     initMenu();
 
     setToolTip(QStringLiteral("Flameshot"));
-#if defined(Q_OS_MACOS)
-    // Because of the following issues on MacOS "Catalina":
-    // https://bugreports.qt.io/browse/QTBUG-86393
-    // https://developer.apple.com/forums/thread/126072
-    auto currentMacOsVersion = QOperatingSystemVersion::current();
-    if (currentMacOsVersion >= currentMacOsVersion.MacOSBigSur) {
-        setContextMenu(m_menu);
-    }
-#else
+
     setContextMenu(m_menu);
-#endif
     QIcon icon =
       QIcon::fromTheme("flameshot-tray", QIcon(GlobalValues::iconPathPNG()));
     setIcon(icon);
 
-#if defined(Q_OS_MACOS)
-    if (currentMacOsVersion < currentMacOsVersion.MacOSBigSur) {
-        // Because of the following issues on MacOS "Catalina":
-        // https://bugreports.qt.io/browse/QTBUG-86393
-        // https://developer.apple.com/forums/thread/126072
-        auto trayIconActivated = [this](QSystemTrayIcon::ActivationReason r) {
-            if (m_menu->isVisible()) {
-                m_menu->hide();
-            } else {
-                m_menu->popup(QCursor::pos());
-            }
-        };
-        connect(this, &QSystemTrayIcon::activated, this, trayIconActivated);
-    }
-#else
+
     connect(this, &TrayIcon::activated, this, [this](ActivationReason r) {
         if (r == Trigger) {
             startGuiCapture();
         }
     });
-#endif
 
 #ifdef Q_OS_WIN
     // Ensure proper removal of tray icon when program quits on Windows.
@@ -92,21 +68,10 @@ void TrayIcon::initMenu()
 
     auto* captureAction = new QAction(tr("&Take Screenshot"), this);
     connect(captureAction, &QAction::triggered, this, [this]() {
-#if defined(Q_OS_MACOS)
-        auto currentMacOsVersion = QOperatingSystemVersion::current();
-        if (currentMacOsVersion >= currentMacOsVersion.MacOSBigSur) {
+        // Wait 400 ms to hide the QMenu
+        QTimer::singleShot(400, this, [this]() {
             startGuiCapture();
-        } else {
-            // It seems it is not relevant for MacOS BigSur (Wait 400 ms to hide
-            // the QMenu)
-            QTimer::singleShot(400, this, [this]() { startGuiCapture(); });
-        }
-#else
-    // Wait 400 ms to hide the QMenu
-    QTimer::singleShot(400, this, [this]() {
-        startGuiCapture();
-    });
-#endif
+        });
     });
     auto* launcherAction = new QAction(tr("&Open Launcher"), this);
     connect(launcherAction,
@@ -149,6 +114,6 @@ void TrayIcon::initMenu()
 
 void TrayIcon::startGuiCapture()
 {
-    auto* widget = Flameshot::instance()->gui();
+    Flameshot::instance()->gui();
 
 }

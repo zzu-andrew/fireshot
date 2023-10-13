@@ -35,7 +35,7 @@ UploadLineItem::UploadLineItem(QWidget* parent,
     ui->uploadTimestamp->setText(timestamp);
 
     connect(ui->copyUrl, &QPushButton::clicked, this, [=]() {
-        FlameshotDaemon::copyToClipboard(url);
+        FireshotDaemon::copyToClipboard(url);
     });
 
     connect(ui->openBrowser, &QPushButton::clicked, this, [=]() {
