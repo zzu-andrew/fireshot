@@ -1,11 +1,11 @@
-target_sources(flameshot PRIVATE
+target_sources(fireshot PRIVATE
     flameshot.h
     flameshotdaemon.h
     flameshotdbusadapter.h
     qguiappcurrentscreen.h
 )
 
-target_sources(flameshot PRIVATE
+target_sources(fireshot PRIVATE
     capturerequest.cpp
     flameshot.cpp
     flameshotdaemon.cpp
@@ -14,5 +14,5 @@ target_sources(flameshot PRIVATE
 )
 
 IF (WIN32)
-    target_sources(flameshot PRIVATE globalshortcutfilter.h globalshortcutfilter.cpp)
+    target_sources(fireshot PRIVATE globalshortcutfilter.h globalshortcutfilter.cpp)
 ENDIF ()

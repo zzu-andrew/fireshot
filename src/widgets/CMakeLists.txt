@@ -3,7 +3,7 @@ add_subdirectory(capture)
 
 # Required to generate MOC
 target_sources(
-        flameshot
+        fireshot
         PRIVATE
         infowindow.ui
         capturelauncher.ui
@@ -26,7 +26,7 @@ target_sources(
 )
 
 target_sources(
-        flameshot
+        fireshot
         PRIVATE
         capturelauncher.cpp
         draggablewidgetmaker.cpp
@@ -42,12 +42,3 @@ target_sources(
         imguploaddialog.cpp
         capture/capturetoolobjects.cpp
 )
-
-if (NOT DISABLE_UPDATE_CHECKER)
-    target_sources(
-            flameshot
-            PRIVATE
-            updatenotificationwidget.h
-            updatenotificationwidget.cpp
-    )
-endif()

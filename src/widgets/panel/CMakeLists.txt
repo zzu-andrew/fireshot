@@ -1,4 +1,4 @@
 # Required to generate MOC
-target_sources(flameshot PRIVATE sidepanelwidget.h utilitypanel.h colorgrabwidget.h)
+target_sources(fireshot PRIVATE sidepanelwidget.h utilitypanel.h colorgrabwidget.h)
 
-target_sources(flameshot PRIVATE sidepanelwidget.cpp utilitypanel.cpp colorgrabwidget.cpp)
+target_sources(fireshot PRIVATE sidepanelwidget.cpp utilitypanel.cpp colorgrabwidget.cpp)

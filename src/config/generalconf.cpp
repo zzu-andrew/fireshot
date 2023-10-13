@@ -38,9 +38,6 @@ GeneralConf::GeneralConf(QWidget* parent)
 #endif
     initShowTrayIcon();
     initShowDesktopNotification();
-#if !defined(DISABLE_UPDATE_CHECKER)
-    initCheckForUpdates();
-#endif
     initShowStartupLaunchMessage();
     initAllowMultipleGuiInstances();
     initSaveLastRegion();
@@ -85,9 +82,6 @@ void GeneralConf::_updateComponents(bool allowEmptySavePath)
     m_uploadWithoutConfirmation->setChecked(config.uploadWithoutConfirmation());
     m_historyConfirmationToDelete->setChecked(
       config.historyConfirmationToDelete());
-#if !defined(DISABLE_UPDATE_CHECKER)
-    m_checkForUpdates->setChecked(config.checkForUpdates());
-#endif
     m_allowMultipleGuiInstances->setChecked(config.allowMultipleGuiInstances());
     m_showMagnifier->setChecked(config.showMagnifier());
     m_squareMagnifier->setChecked(config.squareMagnifier());
@@ -136,13 +130,6 @@ void GeneralConf::showDesktopNotificationChanged(bool checked)
 {
     ConfigHandler().setShowDesktopNotification(checked);
 }
-
-#if !defined(DISABLE_UPDATE_CHECKER)
-void GeneralConf::checkForUpdatesChanged(bool checked)
-{
-    ConfigHandler().setCheckForUpdates(checked);
-}
-#endif
 
 void GeneralConf::allowMultipleGuiInstancesChanged(bool checked)
 {
@@ -345,20 +332,6 @@ void GeneralConf::initConfigButtons()
             this,
             &GeneralConf::resetConfiguration);
 }
-
-#if !defined(DISABLE_UPDATE_CHECKER)
-void GeneralConf::initCheckForUpdates()
-{
-    m_checkForUpdates = new QCheckBox(tr("Automatic check for updates"), this);
-    m_checkForUpdates->setToolTip(tr("Check for updates automatically"));
-    m_scrollAreaLayout->addWidget(m_checkForUpdates);
-
-    connect(m_checkForUpdates,
-            &QCheckBox::clicked,
-            this,
-            &GeneralConf::checkForUpdatesChanged);
-}
-#endif
 
 void GeneralConf::initAllowMultipleGuiInstances()
 {

@@ -1,11 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // SPDX-FileCopyrightText: 2017-2019 Alejandro Sirgo Rica & Contributors
 
-#ifndef USE_EXTERNAL_SINGLEAPPLICATION
 #include "singleapplication.h"
-#else
-#include "QtSolutions/qtsingleapplication.h"
-#endif
 
 #include "abstractlogger.h"
 #include "src/cli/commandlineparser.h"
@@ -50,17 +46,10 @@ void requestCaptureAndWait(const CaptureRequest& req)
     Flameshot* flameshot = Flameshot::instance();
     flameshot->requestCapture(req);
     QObject::connect(flameshot, &Flameshot::captureTaken, [&](const QPixmap&) {
-#if defined(Q_OS_MACOS)
-        // Only useful on MacOS because each instance hosts its own widgets
-        if (!FlameshotDaemon::isThisInstanceHostingWidgets()) {
-            qApp->exit(0);
-        }
-#else
         // if this instance is not daemon, make sure it exit after caputre finish
         if (FlameshotDaemon::instance() == nullptr && !Flameshot::instance()->haveExternalWidget()) {
             qApp->exit(0);
         }
-#endif
     });
     QObject::connect(flameshot, &Flameshot::captureFailed, []() {
         AbstractLogger::info() << "Screenshot aborted.";
@@ -73,7 +62,7 @@ QSharedMemory* guiMutexLock()
 {
     QString key = "org.flameshot.Flameshot-" APP_VERSION;
     auto* shm = new QSharedMemory(key);
-#ifdef Q_OS_UNIX
+#if defined(Q_OS_UNIX)
     // Destroy shared memory if the last instance crashed on Unix
     shm->attach();
     delete shm;
@@ -100,12 +89,8 @@ int main(int argc, char* argv[])
 
     // no arguments, just launch Flameshot
     if (argc == 1) {
-#ifndef USE_EXTERNAL_SINGLEAPPLICATION
         SingleApplication app(argc, argv);
 
-#else
-        QtSingleApplication app(argc, argv);
-#endif
         QApplication::setStyle(new StyleOverride);
 
         QTranslator translator, qtTranslator;

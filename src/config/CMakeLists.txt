@@ -1,5 +1,5 @@
 target_sources(
-  flameshot
+fireshot
   PRIVATE buttonlistview.cpp
           cacheutils.cpp
           clickablelabel.cpp

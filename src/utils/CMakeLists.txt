@@ -1,6 +1,6 @@
 # Required to generate MOC
 target_sources(
-  flameshot
+        fireshot
   PRIVATE abstractlogger.h
           filenamehandler.h
           screengrabber.h
@@ -11,7 +11,7 @@ target_sources(
 )
 
 target_sources(
-  flameshot
+        fireshot
   PRIVATE abstractlogger.cpp
           filenamehandler.cpp
           screengrabber.cpp
@@ -31,7 +31,7 @@ target_sources(
 
 IF (WIN32)
   target_sources(
-    flameshot
+          fireshot
     PRIVATE winlnkfileparse.cpp
   )
 ENDIF()
