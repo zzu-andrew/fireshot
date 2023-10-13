@@ -1,7 +1,6 @@
 #include "trayicon.h"
 
 #include "src/core/flameshot.h"
-#include "src/core/flameshotdaemon.h"
 #include "src/utils/globalvalues.h"
 
 #include "src/utils/confighandler.h"
@@ -9,18 +8,15 @@
 #include <QMenu>
 #include <QTimer>
 #include <QUrl>
-#include <QVersionNumber>
 
-#if defined(Q_OS_MACOS)
-#include <QOperatingSystemVersion>
-#endif
+#include <QDebug>
 
 TrayIcon::TrayIcon(QObject* parent)
   : QSystemTrayIcon(parent)
 {
     initMenu();
 
-    setToolTip(QStringLiteral("Flameshot"));
+    setToolTip(QStringLiteral("FireShot"));
 
     setContextMenu(m_menu);
     QIcon icon =
@@ -29,6 +25,7 @@ TrayIcon::TrayIcon(QObject* parent)
 
 
     connect(this, &TrayIcon::activated, this, [this](ActivationReason r) {
+        qDebug() << r ;
         if (r == Trigger) {
             startGuiCapture();
         }

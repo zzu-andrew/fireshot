@@ -89,6 +89,7 @@ int main(int argc, char* argv[])
 
     qApp->setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
 
+    Flameshot::instance();
     FireshotDaemon::start();
 
     return qApp->exec();
