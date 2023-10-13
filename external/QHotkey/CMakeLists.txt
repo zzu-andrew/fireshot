@@ -11,18 +11,7 @@ set(LIBS
 set(SRC_FILES
         qhotkey.cpp)
 
-if(APPLE)
-    set(CMAKE_C_ARCHIVE_CREATE   "<CMAKE_AR> Scr <TARGET> <LINK_FLAGS> <OBJECTS>")
-    set(CMAKE_CXX_ARCHIVE_CREATE "<CMAKE_AR> Scr <TARGET> <LINK_FLAGS> <OBJECTS>")
-    set(CMAKE_C_ARCHIVE_FINISH   "<CMAKE_RANLIB> -no_warning_for_no_symbols -c <TARGET>")
-    set(CMAKE_CXX_ARCHIVE_FINISH "<CMAKE_RANLIB> -no_warning_for_no_symbols -c <TARGET>")
-
-    find_library(CARBON_LIBRARY Carbon)
-    mark_as_advanced(CARBON_LIBRARY)
-
-    set(SRC_FILES ${SRC_FILES} qhotkey_mac.cpp)
-    set(LIBS ${LIBS} ${CARBON_LIBRARY})
-elseif(WIN32)
+if(WIN32)
     set(SRC_FILES ${SRC_FILES} qhotkey_win.cpp)
 else()
     find_package(X11 REQUIRED)

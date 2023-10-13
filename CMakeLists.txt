@@ -50,10 +50,6 @@ option(BUILD_STATIC_LIBS ON)
 option(BUILD_SHARED_LIBS OFF)
 add_subdirectory(external/Qt-Color-Widgets EXCLUDE_FROM_ALL) 
 
-
-if (APPLE)
-  add_subdirectory(external/QHotkey)
-endif()
 add_subdirectory(src)
 
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README.md") # TODO: Where is this used? Do we need a better

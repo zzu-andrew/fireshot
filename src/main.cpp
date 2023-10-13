@@ -76,7 +76,7 @@ QSharedMemory* guiMutexLock()
 
 int main(int argc, char* argv[])
 {
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX)
     wayland_hacks();
 #endif
 
@@ -119,7 +119,7 @@ int main(int argc, char* argv[])
         auto c = Flameshot::instance();
         FlameshotDaemon::start();
 
-#if !(defined(Q_OS_MACOS) || defined(Q_OS_WIN))
+#if !(defined(Q_OS_WIN))
         new FlameshotDBusAdapter(c);
         QDBusConnection dbus = QDBusConnection::sessionBus();
         if (!dbus.isConnected()) {
