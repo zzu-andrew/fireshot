@@ -18,18 +18,10 @@ QString GlobalValues::versionInfo()
 
 QString GlobalValues::iconPath()
 {
-#if USE_MONOCHROME_ICON
-    return QString(":img/app/flameshot.monochrome.svg");
-#else
     return { ":img/app/flameshot.svg" };
-#endif
 }
 
 QString GlobalValues::iconPathPNG()
 {
-#if USE_MONOCHROME_ICON
-    return QString(":img/app/flameshot.monochrome.png");
-#else
     return { ":img/app/flameshot.png" };
-#endif
 }

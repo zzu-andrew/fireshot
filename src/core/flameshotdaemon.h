@@ -34,8 +34,6 @@ private:
     void attachPin(const QPixmap& pixmap, QRect geometry);
     void attachScreenshotToClipboard(const QPixmap& pixmap);
 
-    void attachPin(const QByteArray& data);
-    void attachScreenshotToClipboard(const QByteArray& screenshot);
     void attachTextToClipboard(const QString& text,
                                const QString& notification);
 
@@ -43,7 +41,6 @@ private:
     void enableTrayIcon(bool enable);
 
 private:
-    static QDBusMessage createMethodCall(const QString& method);
     static void checkDBusConnection(const QDBusConnection& connection);
     static void call(const QDBusMessage& m);
 
@@ -55,6 +52,4 @@ private:
 
 
     static FlameshotDaemon* m_instance;
-
-    friend class FlameshotDBusAdapter;
 };

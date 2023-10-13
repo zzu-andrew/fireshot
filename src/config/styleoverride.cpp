@@ -10,6 +10,8 @@ int StyleOverride::styleHint(StyleHint hint,
                              const QWidget* widget,
                              QStyleHintReturn* returnData) const
 {
+
+    // 当鼠标悬停在工具上时 延时600毫秒出现工具提示
     if (hint == SH_ToolTip_WakeUpDelay) {
         return 600;
     } else {

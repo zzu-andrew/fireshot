@@ -11,7 +11,6 @@ set(PROJECT_NAME_CAPITALIZED "FireShot")
 
 
 option(FLAMESHOT_DEBUG_CAPTURE "Enable mode to make debugging easier" ON)
-option(USE_MONOCHROME_ICON "Build using monochrome icon as default" OFF)
 option(GENERATE_TS "Regenerate translation source files" OFF)
 option(USE_LAUNCHER_ABSOLUTE_PATH "Use absolute path for the desktop launcher" ON)
 option(USE_WAYLAND_CLIPBOARD "USE KF Gui Wayland Clipboard" OFF)

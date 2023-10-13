@@ -94,13 +94,6 @@ void FlameshotDaemon::createPin(const QPixmap& capture, QRect geometry)
         return;
     }
 
-    QByteArray data;
-    QDataStream stream(&data, QIODevice::WriteOnly);
-    stream << capture;
-    stream << geometry;
-    QDBusMessage m = createMethodCall(QStringLiteral("attachPin"));
-    m << data;
-    call(m);
 }
 
 void FlameshotDaemon::copyToClipboard(const QPixmap& capture)
@@ -110,15 +103,6 @@ void FlameshotDaemon::copyToClipboard(const QPixmap& capture)
         return;
     }
 
-    QDBusMessage m =
-      createMethodCall(QStringLiteral("attachScreenshotToClipboard"));
-
-    QByteArray data;
-    QDataStream stream(&data, QIODevice::WriteOnly);
-    stream << capture;
-
-    m << data;
-    call(m);
 }
 
 void FlameshotDaemon::copyToClipboard(const QString& text,
@@ -128,13 +112,6 @@ void FlameshotDaemon::copyToClipboard(const QString& text,
         instance()->attachTextToClipboard(text, notification);
         return;
     }
-    auto m = createMethodCall(QStringLiteral("attachTextToClipboard"));
-
-    m << text << notification;
-
-    QDBusConnection sessionBus = QDBusConnection::sessionBus();
-    checkDBusConnection(sessionBus);
-    sessionBus.call(m);
 }
 
 /**
@@ -172,9 +149,6 @@ FlameshotDaemon* FlameshotDaemon::instance()
     // Because we don't use DBus on MacOS, each instance of flameshot is its own
     // mini-daemon, responsible for hosting its own persistent widgets (e.g.
     // pins).
-#if defined(Q_OS_MACOS)
-    start();
-#endif
     return m_instance;
 }
 
@@ -217,29 +191,6 @@ void FlameshotDaemon::attachScreenshotToClipboard(const QPixmap& pixmap)
     m_clipboardSignalBlocked = true;
     saveToClipboard(pixmap);
     clipboard->blockSignals(false);
-}
-
-// D-BUS ADAPTER METHODS
-
-void FlameshotDaemon::attachPin(const QByteArray& data)
-{
-    QDataStream stream(data);
-    QPixmap pixmap;
-    QRect geometry;
-
-    stream >> pixmap;
-    stream >> geometry;
-
-    attachPin(pixmap, geometry);
-}
-
-void FlameshotDaemon::attachScreenshotToClipboard(const QByteArray& screenshot)
-{
-    QDataStream stream(screenshot);
-    QPixmap p;
-    stream >> p;
-
-    attachScreenshotToClipboard(p);
 }
 
 void FlameshotDaemon::attachTextToClipboard(const QString& text,
@@ -292,15 +243,6 @@ void FlameshotDaemon::enableTrayIcon(bool enable)
     }
 }
 
-QDBusMessage FlameshotDaemon::createMethodCall(const QString& method)
-{
-    QDBusMessage m =
-      QDBusMessage::createMethodCall(QStringLiteral("org.flameshot.Flameshot"),
-                                     QStringLiteral("/"),
-                                     QLatin1String(""),
-                                     method);
-    return m;
-}
 
 void FlameshotDaemon::checkDBusConnection(const QDBusConnection& connection)
 {

@@ -13,7 +13,6 @@ public:
 
 
 private:
-    void initTrayIcon();
     void initMenu();
 
     void startGuiCapture();
