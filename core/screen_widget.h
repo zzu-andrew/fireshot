@@ -10,16 +10,36 @@
 #include <QString>
 #include <QPainter>
 
+#include "screen_list.h"
 
 class ScreenWidgets : public QWidget {
     Q_OBJECT
+
 public:
-    explicit ScreenWidgets(QWidget *parent);
-    ~ScreenWidgets() override;
+    ScreenWidgets(QWidget *parent = nullptr);
+    ~ScreenWidgets();
 
+    void start(std::shared_ptr<ScreenList> list, int index);
+    void cleanup();
 
+    void finishConfirmArea();
+
+protected:
+    void showEvent(QShowEvent* event) override;
+    void hideEvent(QHideEvent* event) override;
+    void closeEvent(QCloseEvent* event) override;
+
+    void mousePressEvent(QMouseEvent *) override;
+    void mouseReleaseEvent(QMouseEvent *) override;
+    void mouseMoveEvent(QMouseEvent *) override;
+    void keyPressEvent(QKeyEvent *) override;
+    void paintEvent(QPaintEvent *) override;
+    void enterEvent(QEvent* event) override;
+    void leaveEvent(QEvent *event) override;
 
 private:
+    QString m_status;  //unknown, active, giveup
+    std::shared_ptr<ScreenList> m_screenlist;
 
 };
 

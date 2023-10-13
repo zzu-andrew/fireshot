@@ -35,8 +35,9 @@ namespace spdlog
         logger_->set_level(static_cast<level::level_enum>(lv));
         logger_->flush_on(static_cast<level::level_enum>(flv));
 
-        //set_pattern("[%H:%M:%S %z] [thread %t] %v");
-        logger_->set_pattern("[%Y-%m-%d %H:%M:%S] [%n] [%^%l%$] [%s:%#] %v");
+        set_pattern("[%H:%M:%S %z] [thread %t] %v");
+        //logger_->set_pattern("[%Y-%m-%d %H:%M:%S] [%n] [%^%l%$] [%s:%#] %v");
+        //logger_->set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [thread %t] %v");
 
         SPDLOG_LOGGER_INFO(logger_, "test3 {}", 3);//会输出文件名和行号
 

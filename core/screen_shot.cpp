@@ -23,6 +23,7 @@ void ScreenShot::rasie() {
 }
 
 void ScreenShot::CaptureScreen(QWidget *parent) {
+    SPD_FUNCTION();
 
 }
 
