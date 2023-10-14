@@ -33,11 +33,13 @@ bool GlobalShortcutFilter::nativeEventFilter(const QByteArray& eventType,
         const quint32 modifiers = LOWORD(msg->lParam);
 
         // Show screenshots history
+        // 按下截屏键和shit键时，触发
         if (VK_SNAPSHOT == keycode && MOD_SHIFT == modifiers) {
             Flameshot::instance()->history();
         }
 
         // Capture screen
+        // 按下截屏键时触发并且同时没有触发Ctrl sshift等键盘的时候触发
         if (VK_SNAPSHOT == keycode && 0 == modifiers) {
             Flameshot::instance()->requestCapture(
               CaptureRequest(CaptureRequest::GRAPHICAL_MODE));
