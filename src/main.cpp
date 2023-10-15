@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
             break;
         }
     }
-
+    // 添加翻译文件
     qtTranslator.load(
       QLocale::system(),
       "qt",
