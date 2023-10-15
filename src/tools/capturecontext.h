@@ -11,11 +11,11 @@
 
 struct CaptureContext
 {
-    // screenshot with modifications
+    // 叠加效果之后的图片
     QPixmap screenshot;
-    // unmodified screenshot
+    // 没有经过任何编辑的原始图片
     QPixmap origScreenshot;
-    // Selection area
+    // 选择的区域
     QRect selection;
     // Selected tool color
     QColor color;

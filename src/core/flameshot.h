@@ -59,10 +59,9 @@ private:
     Flameshot();
     bool resolveAnyConfigErrors();
 
-    // class members
-    static Origin m_origin;
     bool m_haveExternalWidget;
 
+    // 用来操作激凸的主界面
     QPointer<CaptureWidget> m_captureWindow;
     QPointer<InfoWindow> m_infoWindow;
     QPointer<CaptureLauncher> m_launcherWindow;

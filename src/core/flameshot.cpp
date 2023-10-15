@@ -35,8 +35,6 @@ Flameshot::Flameshot()
 {
     QString StyleSheet = CaptureButton::globalStyleSheet();
     qApp->setStyleSheet(StyleSheet);
-
-
 }
 
 Flameshot* Flameshot::instance()
@@ -51,32 +49,17 @@ CaptureWidget* Flameshot::gui(const CaptureRequest& req)
         return nullptr;
     }
 
+    // 创建截图主窗口
     if (nullptr == m_captureWindow) {
-        // TODO is this unnecessary now?
-        int timeout = 5000; // 5 seconds
-        const int delay = 100;
-        QWidget* modalWidget = nullptr;
-        for (; timeout >= 0; timeout -= delay) {
-            modalWidget = qApp->activeModalWidget();
-            if (nullptr == modalWidget) {
-                break;
-            }
-            modalWidget->close();
-            modalWidget->deleteLater();
-            QThread::msleep(delay);
-        }
-        if (0 == timeout) {
-            QMessageBox::warning(
-              nullptr, tr("Error"), tr("Unable to close active modal widgets"));
-            return nullptr;
-        }
-
+        // 截图并将图片显示成半透明状态，全部都在截图窗口中实现
         m_captureWindow = new CaptureWidget(req);
 
 #ifdef Q_OS_WIN
         m_captureWindow->show();
 #else
+      // 在linux上必须使用 fullscreen 否则截图之后效果是一个已经缩小的图片来编辑
         m_captureWindow->showFullScreen();
+
 #endif
         return m_captureWindow;
     } else {
@@ -204,6 +187,7 @@ QVersionNumber Flameshot::getVersion()
  * @brief Prompt the user to resolve config errors if necessary.
  * @return Whether errors were resolved.
  */
+ //
 bool Flameshot::resolveAnyConfigErrors()
 {
     bool resolved = true;
@@ -344,6 +328,3 @@ bool Flameshot::haveExternalWidget()
 {
     return m_haveExternalWidget;
 }
-
-// STATIC ATTRIBUTES
-Flameshot::Origin Flameshot::m_origin = Flameshot::DAEMON;

@@ -1,13 +1,3 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
-// SPDX-FileCopyrightText: 2017-2019 Alejandro Sirgo Rica & Contributors
-
-// Based on Lightscreen areadialog.cpp, Copyright 2017  Christian Kaiser
-// <info@ckaiser.com.ar> released under the GNU GPL2
-// <https://www.gnu.org/licenses/gpl-2.0.txt>
-
-// Based on KDE's KSnapshot regiongrabber.cpp, revision 796531, Copyright 2007
-// Luca Gugelmann <lucag@student.ethz.ch> released under the GNU LGPL
-// <http://www.gnu.org/licenses/old-licenses/library.txt>
 
 #include "capturewidget.h"
 #include "abstractlogger.h"
@@ -74,6 +64,7 @@ CaptureWidget::CaptureWidget(const CaptureRequest& req,
   , m_startMove(false)
 
 {
+    // 获取当前应用能够撤销的次数
     m_undoStack.setUndoLimit(ConfigHandler().undoLimit());
     m_context.circleCount = 1;
 
