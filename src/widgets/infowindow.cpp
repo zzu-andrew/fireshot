@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2021-2022 Jeremy Borgman & Contributors
 
 #include "infowindow.h"
-#include "./ui_infowindow.h"
+#include "ui_infowindow.h"
 #include "src/core/flameshotdaemon.h"
 #include "src/core/qguiappcurrentscreen.h"
 #include "src/utils/globalvalues.h"

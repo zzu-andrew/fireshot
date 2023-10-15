@@ -6,10 +6,6 @@
 #include <QApplication>
 #include <QPainter>
 #include <QStyle>
-#if defined(Q_OS_MACOS)
-#include "src/widgets/capture/capturewidget.h"
-#include <QWidget>
-#endif
 
 AcceptTool::AcceptTool(QObject* parent)
   : AbstractActionTool(parent)

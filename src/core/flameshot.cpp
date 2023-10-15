@@ -3,9 +3,6 @@
 
 #include "flameshot.h"
 #include "flameshotdaemon.h"
-#if defined(Q_OS_MACOS)
-#include "external/QHotkey/QHotkey"
-#endif
 
 #include "abstractlogger.h"
 #include "screenshotsaver.h"
@@ -31,42 +28,15 @@
 #include <QTimer>
 #include <QVersionNumber>
 
-#if defined(Q_OS_MACOS)
-#include <QScreen>
-#endif
 
 Flameshot::Flameshot()
   : m_captureWindow(nullptr)
   , m_haveExternalWidget(false)
-#if defined(Q_OS_MACOS)
-  , m_HotkeyScreenshotCapture(nullptr)
-  , m_HotkeyScreenshotHistory(nullptr)
-#endif
 {
     QString StyleSheet = CaptureButton::globalStyleSheet();
     qApp->setStyleSheet(StyleSheet);
 
-#if defined(Q_OS_MACOS)
-    // Try to take a test screenshot, MacOS will request a "Screen Recording"
-    // permissions on the first run. Otherwise it will be hidden under the
-    // CaptureWidget
-    QScreen* currentScreen = QGuiAppCurrentScreen().currentScreen();
-    currentScreen->grabWindow(QApplication::desktop()->winId(), 0, 0, 1, 1);
 
-    // set global shortcuts for MacOS
-    m_HotkeyScreenshotCapture = new QHotkey(
-      QKeySequence(ConfigHandler().shortcut("TAKE_SCREENSHOT")), true, this);
-    QObject::connect(m_HotkeyScreenshotCapture,
-                     &QHotkey::activated,
-                     qApp,
-                     [this]() { gui(); });
-    m_HotkeyScreenshotHistory = new QHotkey(
-      QKeySequence(ConfigHandler().shortcut("SCREENSHOT_HISTORY")), true, this);
-    QObject::connect(m_HotkeyScreenshotHistory,
-                     &QHotkey::activated,
-                     qApp,
-                     [this]() { history(); });
-#endif
 }
 
 Flameshot* Flameshot::instance()
@@ -187,10 +157,7 @@ void Flameshot::launcher()
         m_launcherWindow = new CaptureLauncher();
     }
     m_launcherWindow->show();
-#if defined(Q_OS_MACOS)
-    m_launcherWindow->activateWindow();
-    m_launcherWindow->raise();
-#endif
+
 }
 
 void Flameshot::config()
@@ -209,10 +176,7 @@ void Flameshot::info()
 {
     if (m_infoWindow == nullptr) {
         m_infoWindow = new InfoWindow();
-#if defined(Q_OS_MACOS)
-        m_infoWindow->activateWindow();
-        m_infoWindow->raise();
-#endif
+
     }
 }
 
@@ -228,26 +192,12 @@ void Flameshot::history()
     }
     historyWidget->show();
 
-#if defined(Q_OS_MACOS)
-    historyWidget->activateWindow();
-    historyWidget->raise();
-#endif
 }
 
 QVersionNumber Flameshot::getVersion()
 {
     return QVersionNumber::fromString(
       QStringLiteral(APP_VERSION).replace("v", ""));
-}
-
-void Flameshot::setOrigin(Origin origin)
-{
-    m_origin = origin;
-}
-
-Flameshot::Origin Flameshot::origin()
-{
-    return m_origin;
 }
 
 /**
@@ -265,9 +215,6 @@ bool Flameshot::resolveAnyConfigErrors()
           resolver, &ConfigResolver::rejected, [resolver, &resolved]() {
               resolved = false;
               resolver->deleteLater();
-              if (origin() == CLI) {
-                  exit(1);
-              }
           });
         QObject::connect(
           resolver, &ConfigResolver::accepted, [resolver, &resolved]() {

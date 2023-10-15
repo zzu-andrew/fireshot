@@ -31,15 +31,9 @@ CaptureLauncher::CaptureLauncher(QDialog* parent)
     ui->captureType->insertItem(
       1, tr("Rectangular Region"), CaptureRequest::GRAPHICAL_MODE);
 
-#if defined(Q_OS_MACOS)
-    // Following to MacOS philosophy (one application cannot be displayed on
-    // more than one display)
-    ui->captureType->insertItem(
-      2, tr("Full Screen (Current Display)"), CaptureRequest::FULLSCREEN_MODE);
-#else
+
     ui->captureType->insertItem(
       2, tr("Full Screen (All Monitors)"), CaptureRequest::FULLSCREEN_MODE);
-#endif
 
     ui->delayTime->setSpecialValueText(tr("No Delay"));
     ui->launchButton->setFocus();

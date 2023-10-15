@@ -16,9 +16,6 @@
 #include <QShortcut>
 #include <QSlider>
 #include <QVBoxLayout>
-#if defined(Q_OS_MACOS)
-#include <QScreen>
-#endif
 
 SidePanelWidget::SidePanelWidget(QPixmap* p, QWidget* parent)
   : QWidget(parent)

@@ -21,23 +21,7 @@ QScreen* QGuiAppCurrentScreen::currentScreen()
 QScreen* QGuiAppCurrentScreen::currentScreen(const QPoint& pos)
 {
     m_currentScreen = screenAt(pos);
-#if defined(Q_OS_MACOS)
-    // On the MacOS if mouse position is at the edge of bottom or right sides
-    // qGuiApp->screenAt will return nullptr, so we need to try to find current
-    // screen by moving 1 pixel inside to the current desktop area
-    if (!m_currentScreen && pos.x() > 0) {
-        QPoint posCorrected(pos.x() - 1, pos.y());
-        m_currentScreen = screenAt(posCorrected);
-    }
-    if (!m_currentScreen && pos.y() > 0) {
-        QPoint posCorrected(pos.x(), pos.y() - 1);
-        m_currentScreen = screenAt(posCorrected);
-    }
-    if (!m_currentScreen && pos.x() > 0 && pos.y() > 0) {
-        QPoint posCorrected(pos.x() - 1, pos.y() - 1);
-        m_currentScreen = screenAt(posCorrected);
-    }
-#endif
+
     if (!m_currentScreen) {
         qCritical("Unable to get current screen, starting to use primary "
                   "screen. It may be a cause of logical error and working with "

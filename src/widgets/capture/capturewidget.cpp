@@ -97,7 +97,7 @@ CaptureWidget::CaptureWidget(const CaptureRequest& req,
     m_contrastUiColor = m_config.contrastUiColor();
     setMouseTracking(true);
     initContext(fullScreen, req);
-#if (defined(Q_OS_WIN) || defined(Q_OS_MACOS))
+#if defined(Q_OS_WIN)
     // Top left of the whole set of screens
     QPoint topLeft(0, 0);
 #endif
@@ -131,17 +131,7 @@ CaptureWidget::CaptureWidget(const CaptureRequest& req,
         }
         move(topLeft);
         resize(pixmap().size());
-#elif defined(Q_OS_MACOS)
-        // Emulate fullscreen mode
-        //        setWindowFlags(Qt::WindowStaysOnTopHint |
-        //        Qt::BypassWindowManagerHint |
-        //                       Qt::FramelessWindowHint |
-        //                       Qt::NoDropShadowWindowHint | Qt::ToolTip |
-        //                       Qt::Popup
-        //                       );
-        QScreen* currentScreen = QGuiAppCurrentScreen().currentScreen();
-        move(currentScreen->geometry().x(), currentScreen->geometry().y());
-        resize(currentScreen->size());
+
 #else
 // Call cmake with -DFLAMESHOT_DEBUG_CAPTURE=ON to enable easier debugging
 #if !defined(FLAMESHOT_DEBUG_CAPTURE)
@@ -158,18 +148,6 @@ CaptureWidget::CaptureWidget(const CaptureRequest& req,
         topLeftOffset = topLeft;
 #endif
 
-#if defined(Q_OS_MACOS)
-        // MacOS works just with one active display, so we need to append
-        // just one current display and keep multiple displays logic for
-        // other OS
-        QRect r;
-        QScreen* screen = QGuiAppCurrentScreen().currentScreen();
-        r = screen->geometry();
-        // all calculations are processed according to (0, 0) start
-        // point so we need to move current object to (0, 0)
-        r.moveTo(0, 0);
-        areas.append(r);
-#else
         for (QScreen* const screen : QGuiApplication::screens()) {
             QRect r = screen->geometry();
             r.moveTo(r.x() / screen->devicePixelRatio(),
@@ -177,7 +155,6 @@ CaptureWidget::CaptureWidget(const CaptureRequest& req,
             r.moveTo(r.topLeft() - topLeftOffset);
             areas.append(r);
         }
-#endif
     } else {
         areas.append(rect());
     }
@@ -254,17 +231,7 @@ CaptureWidget::CaptureWidget(const CaptureRequest& req,
 
 CaptureWidget::~CaptureWidget()
 {
-#if defined(Q_OS_MACOS)
-    for (QWidget* widget : qApp->topLevelWidgets()) {
-        QString className(widget->metaObject()->className());
-        if (0 ==
-            className.compare(CaptureWidget::staticMetaObject.className())) {
-            widget->showNormal();
-            widget->hide();
-            break;
-        }
-    }
-#endif
+
     if (m_captureDone) {
         auto lastRegion = m_selection->geometry();
         setLastRegion(lastRegion);
@@ -1056,7 +1023,7 @@ void CaptureWidget::initPanel()
 {
     QRect panelRect = rect();
     if (m_context.fullscreen) {
-#if (defined(Q_OS_MACOS) || defined(Q_OS_LINUX))
+#if (defined(Q_OS_LINUX))
         QScreen* currentScreen = QGuiAppCurrentScreen().currentScreen();
         panelRect = currentScreen->geometry();
         auto devicePixelRatio = currentScreen->devicePixelRatio();
@@ -1078,16 +1045,10 @@ void CaptureWidget::initPanel()
         panelToggleButton->setColor(m_uiColor);
         panelToggleButton->setOrientation(
           OrientablePushButton::VerticalBottomToTop);
-#if defined(Q_OS_MACOS)
-        panelToggleButton->move(
-          0,
-          static_cast<int>(panelRect.height() / 2) -
-            static_cast<int>(panelToggleButton->width() / 2));
-#else
+
         panelToggleButton->move(panelRect.x(),
                                 panelRect.y() + panelRect.height() / 2 -
                                   panelToggleButton->width() / 2);
-#endif
         panelToggleButton->setCursor(Qt::ArrowCursor);
         (new DraggableWidgetMaker(this))->makeDraggable(panelToggleButton);
         connect(panelToggleButton,
@@ -1099,16 +1060,10 @@ void CaptureWidget::initPanel()
     m_panel = new UtilityPanel(this);
     m_panel->hide();
     makeChild(m_panel);
-#if defined(Q_OS_MACOS)
-    QScreen* currentScreen = QGuiAppCurrentScreen().currentScreen();
-    panelRect.moveTo(mapFromGlobal(panelRect.topLeft()));
-    m_panel->setFixedWidth(static_cast<int>(m_colorPicker->width() * 1.5));
-    m_panel->setFixedHeight(currentScreen->geometry().height());
-#else
+
     panelRect.moveTo(mapFromGlobal(panelRect.topLeft()));
     panelRect.setWidth(m_colorPicker->width() * 1.5);
     m_panel->setGeometry(panelRect);
-#endif
     connect(m_panel,
             &UtilityPanel::layerChanged,
             this,

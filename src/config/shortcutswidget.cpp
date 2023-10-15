@@ -93,11 +93,8 @@ void ShortcutsWidget::populateInfoTable()
         const auto key_sequence = current_shortcut.at(2);
         m_table->setItem(i, 0, new QTableWidgetItem(description));
 
-#if defined(Q_OS_MACOS)
-        auto* item = new QTableWidgetItem(nativeOSHotKeyText(key_sequence));
-#else
         QTableWidgetItem* item = new QTableWidgetItem(key_sequence);
-#endif
+
         item->setTextAlignment(Qt::AlignCenter);
         m_table->setItem(i, 1, item);
 
@@ -134,15 +131,10 @@ void ShortcutsWidget::onShortcutCellClicked(int row, int col)
             QKeySequence shortcutValue = setShortcutDialog->shortcut();
 
             // set no shortcut is Backspace
-#if defined(Q_OS_MACOS)
-            if (shortcutValue == QKeySequence(Qt::CTRL + Qt::Key_Backspace)) {
-                shortcutValue = QKeySequence("");
-            }
-#else
+
             if (shortcutValue == QKeySequence(Qt::Key_Backspace)) {
                 shortcutValue = QKeySequence("");
             }
-#endif
             if (m_config.setShortcut(shortcutName, shortcutValue.toString())) {
                 populateInfoTable();
             }
@@ -198,10 +190,8 @@ void ShortcutsWidget::loadShortcuts()
                                   << QKeySequence(Qt::Key_Escape).toString());
 
     // Global hotkeys
-#if defined(Q_OS_MACOS)
-    appendShortcut("TAKE_SCREENSHOT", tr("Capture screen"));
-    appendShortcut("SCREENSHOT_HISTORY", tr("Screenshot history"));
-#elif defined(Q_OS_WIN)
+
+#if defined(Q_OS_WIN)
     m_shortcuts << (QStringList() << "" << QObject::tr("Screenshot history")
                                   << "Shift+Print Screen");
     m_shortcuts << (QStringList()
@@ -227,14 +217,3 @@ void ShortcutsWidget::appendShortcut(const QString& shortcutName,
                     << shortcut.replace("Return", "Enter"));
 }
 
-#if defined(Q_OS_MACOS)
-const QString& ShortcutsWidget::nativeOSHotKeyText(const QString& text)
-{
-    m_res = text;
-    m_res.replace("Ctrl+", "⌘");
-    m_res.replace("Alt+", "⌥");
-    m_res.replace("Meta+", "⌃");
-    m_res.replace("Shift+", "⇧");
-    return m_res;
-}
-#endif

@@ -57,11 +57,6 @@ set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README.md") # TODO: Wher
 if(WIN32)
   # Include all dynamically linked runtime libraries such as MSVCRxxx.dll
   include(InstallRequiredSystemLibraries)
-
-else()
-  set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}-linux")
-  set(CPACK_GENERATOR TGZ)
-  set(CPACK_SOURCE_GENERATOR TGZ)
 endif()
 
 include(CPack)

@@ -1,8 +1,6 @@
 //
 // Created by wangyz38535 on 2023/10/11.
 //
-#include <QDir>
-
 #include "spdlog_wrapper.h"
 #include "spdlog/spdlog.h"
 #include "spdlog/cfg/env.h"  // support for loading levels from the environment variable

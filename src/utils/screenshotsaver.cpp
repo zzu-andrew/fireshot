@@ -23,9 +23,7 @@
 #include <QStandardPaths>
 #include <qimagewriter.h>
 #include <qmimedatabase.h>
-#if defined(Q_OS_MACOS)
-#include "src/widgets/capture/capturewidget.h"
-#endif
+
 
 bool saveToFilesystem(const QPixmap& capture,
                       const QString& path,
@@ -168,17 +166,7 @@ bool saveToFilesystemGUI(const QPixmap& capture)
     }
     QString savePath = FileNameHandler().properScreenshotPath(
       defaultSavePath, ConfigHandler().saveAsFileExtension());
-#if defined(Q_OS_MACOS)
-    for (QWidget* widget : qApp->topLevelWidgets()) {
-        QString className(widget->metaObject()->className());
-        if (0 ==
-            className.compare(CaptureWidget::staticMetaObject.className())) {
-            widget->showNormal();
-            widget->hide();
-            break;
-        }
-    }
-#endif
+
     if (!config.savePathFixed()) {
         savePath = ShowSaveFileDialog(QObject::tr("Save screenshot"), savePath);
     }

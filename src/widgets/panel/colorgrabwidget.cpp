@@ -165,15 +165,7 @@ QColor ColorGrabWidget::getColorAtPoint(const QPoint& p) const
           QPoint(point.x() / ZOOM2, point.y() / ZOOM2));
     }
     QPoint point = p;
-#if defined(Q_OS_MACOS)
-    QScreen* currentScreen = QGuiAppCurrentScreen().currentScreen();
-    if (currentScreen) {
-        point = QPoint((p.x() - currentScreen->geometry().x()) *
-                         currentScreen->devicePixelRatio(),
-                       (p.y() - currentScreen->geometry().y()) *
-                         currentScreen->devicePixelRatio());
-    }
-#endif
+
     QPixmap pixel = m_pixmap->copy(QRect(point, point));
     return pixel.toImage().pixel(0, 0);
 }
@@ -208,16 +200,6 @@ void ColorGrabWidget::updateWidget()
     auto realCursorPos = cursorPos();
     auto adjustedCursorPos = realCursorPos;
 
-#if defined(Q_OS_MACOS)
-    QScreen* currentScreen = QGuiAppCurrentScreen().currentScreen();
-    if (currentScreen) {
-        adjustedCursorPos =
-          QPoint((realCursorPos.x() - currentScreen->geometry().x()) *
-                   currentScreen->devicePixelRatio(),
-                 (realCursorPos.y() - currentScreen->geometry().y()) *
-                   currentScreen->devicePixelRatio());
-    }
-#endif
 
     rect.moveCenter(cursorPos());
     setGeometry(rect);
