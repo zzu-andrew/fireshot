@@ -50,7 +50,7 @@ CaptureTool* ToolFactory::CreateTool(CaptureTool::Type t, QObject* parent)
         if_TYPE_return_TOOL(TYPE_SAVE, SaveTool);
         if_TYPE_return_TOOL(TYPE_EXIT, ExitTool);
         if_TYPE_return_TOOL(TYPE_IMAGEUPLOADER, ImgUploaderTool);
-
+        if_TYPE_return_TOOL(TYPE_OPEN_APP, AppLauncher);
         if_TYPE_return_TOOL(TYPE_PIXELATE, PixelateTool);
         if_TYPE_return_TOOL(TYPE_REDO, RedoTool);
         if_TYPE_return_TOOL(TYPE_PIN, PinTool);

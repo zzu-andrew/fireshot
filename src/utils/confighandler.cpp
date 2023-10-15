@@ -18,7 +18,6 @@
 #include <algorithm>
 #include <stdexcept>
 
-
 // HELPER FUNCTIONS
 
 bool verifyLaunchFile()
@@ -79,9 +78,8 @@ static QMap<class QString, QSharedPointer<ValueHandler>>
     OPTION("allowMultipleGuiInstances"   ,Bool               ( false         )),
     OPTION("showMagnifier"               ,Bool               ( false         )),
     OPTION("squareMagnifier"             ,Bool               ( false         )),
-#if !defined(Q_OS_WIN)
+
     OPTION("autoCloseIdleDaemon"         ,Bool               ( false         )),
-#endif
     OPTION("startupLaunch"               ,Bool               ( false         )),
     OPTION("showStartupLaunchMessage"    ,Bool               ( true          )),
     OPTION("copyURLAfterUpload"          ,Bool               ( true          )),
@@ -137,7 +135,7 @@ static QMap<QString, QSharedPointer<KeySequence>> recognizedShortcuts = {
     SHORTCUT("TYPE_ACCEPT"              ,   "Return"                ),
     SHORTCUT("TYPE_EXIT"                ,   "Ctrl+Q"                ),
     SHORTCUT("TYPE_IMAGEUPLOADER"       ,                           ),
-
+    SHORTCUT("TYPE_OPEN_APP"            ,   "Ctrl+O"                ),
     SHORTCUT("TYPE_PIXELATE"            ,   "B"                     ),
     SHORTCUT("TYPE_INVERT"              ,   "I"                     ),
     SHORTCUT("TYPE_REDO"                ,   "Ctrl+Shift+Z"          ),
@@ -159,7 +157,6 @@ static QMap<QString, QSharedPointer<KeySequence>> recognizedShortcuts = {
     SHORTCUT("TYPE_COMMIT_CURRENT_TOOL" ,   "Ctrl+Return"           ),
 
     SHORTCUT("TYPE_DELETE_CURRENT_TOOL" ,   "Delete"                ),
-
     SHORTCUT("TYPE_PIN"                 ,                           ),
     SHORTCUT("TYPE_SELECTIONINDICATOR"  ,                           ),
     SHORTCUT("TYPE_SIZEINCREASE"        ,                           ),
@@ -229,8 +226,35 @@ void ConfigHandler::setStartupLaunch(const bool start)
         return;
     }
     setValue(QStringLiteral("startupLaunch"), start);
-
-#if defined(Q_OS_LINUX) || defined(Q_OS_UNIX)
+#if defined(Q_OS_MACOS)
+    /* TODO - there should be more correct way via API, but didn't find it
+     without extra dependencies, there should be something like that:
+     https://stackoverflow.com/questions/3358410/programmatically-run-at-startup-on-mac-os-x
+     But files with this features differs on different MacOS versions and it
+     doesn't work not on a BigSur at lease.
+     */
+    QProcess process;
+    if (start) {
+        process.start("osascript",
+                      QStringList()
+                        << "-e"
+                        << "tell application \"System Events\" to make login "
+                           "item at end with properties {name: "
+                           "\"Flameshot\",path:\"/Applications/"
+                           "flameshot.app\", hidden:false}");
+    } else {
+        process.start("osascript",
+                      QStringList() << "-e"
+                                    << "tell application \"System Events\" to "
+                                       "delete login item \"Flameshot\"");
+    }
+    if (!process.waitForFinished()) {
+        qWarning() << "Login items is changed. " << process.errorString();
+    } else {
+        qWarning() << "Unable to change login items, error:"
+                   << process.readAll();
+    }
+#elif defined(Q_OS_LINUX) || defined(Q_OS_UNIX)
     QString path =
       QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) +
       "/autostart/";
@@ -250,7 +274,7 @@ void ConfigHandler::setStartupLaunch(const bool start)
     } else {
         file.remove();
     }
-#elif
+#elif defined(Q_OS_WIN)
     QSettings bootUpSettings(
       "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
       QSettings::NativeFormat);
@@ -336,9 +360,13 @@ bool ConfigHandler::setShortcut(const QString& actionName,
 {
     qDebug() << actionName;
     static QVector<QKeySequence> reservedShortcuts = {
-
+#if defined(Q_OS_MACOS)
+        Qt::CTRL + Qt::Key_Backspace,
+        Qt::Key_Escape,
+#else
         Qt::Key_Backspace,
         Qt::Key_Escape,
+#endif
     };
 
     if (hasError()) {
