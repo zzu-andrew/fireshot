@@ -23,8 +23,6 @@ public:
     static const QList<CaptureTool::Type>& getIterableButtonTypes();
     static int getPriorityByButton(CaptureTool::Type);
 
-    QString name() const;
-    QString description() const;
     QIcon icon() const;
     CaptureTool* tool() const;
 

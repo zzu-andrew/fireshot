@@ -33,6 +33,7 @@ Flameshot::Flameshot()
   : m_captureWindow(nullptr)
   , m_haveExternalWidget(false)
 {
+    // 获取全局风格设置
     QString StyleSheet = CaptureButton::globalStyleSheet();
     qApp->setStyleSheet(StyleSheet);
 }
@@ -54,8 +55,10 @@ CaptureWidget* Flameshot::gui(const CaptureRequest& req)
         // 截图并将图片显示成半透明状态，全部都在截图窗口中实现
         m_captureWindow = new CaptureWidget(req);
 
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN)
         m_captureWindow->show();
+        // 在windows上如果使用showFullScreen 会导致只能截一个屏幕，不支持双屏幕的用户
+        //m_captureWindow->showFullScreen();
 #else
       // 在linux上必须使用 fullscreen 否则截图之后效果是一个已经缩小的图片来编辑
         m_captureWindow->showFullScreen();

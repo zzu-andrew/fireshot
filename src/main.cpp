@@ -17,9 +17,7 @@
 #include <QTranslator>
 #if defined(Q_OS_LINUX) || defined(Q_OS_UNIX)
 #include <desktopinfo.h>
-#endif
 
-#ifdef Q_OS_LINUX
 // source: https://github.com/ksnip/ksnip/issues/416
 void wayland_hacks()
 {

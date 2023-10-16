@@ -17,7 +17,7 @@ struct CaptureContext
     QPixmap origScreenshot;
     // 选择的区域
     QRect selection;
-    // Selected tool color
+    // 选择的工具颜色
     QColor color;
     // Path where the content has to be saved
     QString savePath;
